@@ -1,0 +1,18 @@
+{% extends 'partials/base.html' %}
+
+{% block title %}
+
+delete
+
+{% endblock title %}
+
+
+{% block  content %}
+  <form action="" method="POST">
+      {% csrf_token %}
+       <p>
+           Are you sure you want to delete ""<b>{{ object.title }}?</b>""
+          <button types="submit" class="btn btn-danger" data-loading-text>Yes</button>
+        </p>
+
+{% endblock content %}

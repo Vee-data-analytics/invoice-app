@@ -1,0 +1,159 @@
+{% extends 'partials/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}
+
+{% endblock title %} 
+
+{% block content %}
+
+ 
+     <!--add Modal -->
+    <div class="modal fade" id="addPositionsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">add position</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+             <form action="" method="POST">
+                {% csrf_token %}
+                {{form|crispy}}
+                <div class="modal-footer">
+                  <button type="submit"  class="btn btn-secondary" value="Submit">Save changes</button>
+              </form>
+          </div>
+          </div>
+        </div>
+      </div>
+      </div>
+      
+      
+      
+       <!--Invoice Modal -->
+       <div class="modal fade" id="closePositionsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Caution</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <div class="modal-body">
+                 Are you sure you want to close the invoice ?
+                 <p>When Invoice is closed it will not be edited.</p>
+               </div>
+               <div class="modal-footer">
+              <a href="{% url 'invoice_app:close' obj.pk %}" class="btn btn-secondary">Close</a>
+             </div>
+           </div>
+          </div>
+        </div>
+      <div>
+        {% if not obj.closed  %}
+        <!-- Button trigger modal -->
+       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPositionsModal">
+        +add position.
+       </button>
+       <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#closePositionsModal">
+        close positions.
+       </button>
+       {% else %}
+
+      <!--Payment Modal -->
+      <div class="modal fade" id="payedPositionsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Caution</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <div class="modal-body">
+                 Do you want to mark this invoice as payed ?
+                 <p>once marked this cannot be undone for this Invoice.</p> 
+               </div>
+               <div class="modal-footer">
+              <a href="{% url 'invoice_app:payed' obj.pk %}" class="btn btn-secondary">Confirm</a>
+             </div>
+           </div>
+          </div>
+        </div>
+      <div>
+       <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#payedPositionsModal">
+        Mark as payed.
+       </button>
+
+       <a href="  {% url 'invoice_app:pdf' obj.pk %} "class="btn btn-danger">export to pdf</a>
+       {% endif %}
+      </div>    
+    
+    {% if messages %}
+     {% for message in messages %}
+       {% if message.tags == 'info' %}
+          <div class ="alert alert-primary mt-2">
+           {{message}}
+        {% endif %} 
+      {% endfor %}
+    {% endif %}
+ 
+
+   <div class= "mt-3">
+      <h5>Client : {{ obj.clients.name }}</h5>
+      <hr>
+      <h3>Positions</h3> {{obj.clients.company_name}}</h3>
+   
+      {% if qs %}
+      <table class="table">
+        <thead>
+          <tr>
+              <th scope="col">#</th>
+              <th scope="col">Title</th>
+              <th scope="col">Description</th>
+              <th scope="col">Qty</th>
+              <th scope="col">Price</th>
+              <th scope="col">Subtotal</th>
+              <th scope="col">Delete</th>
+              <th scope="col">Payment</th>
+           </tr>
+        </thead>
+        <tbody>
+          {% for item in qs %}
+            <tr style = "vertical-align:middle;">
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{item.title}}</td>
+                <td>{{item.description}}</td>
+                <td>{{item.quantity}}</td>
+                <td>R {{item.price}}</td>
+                <td>R  {% widthratio item.quantity 1 item.price %} </td>
+                <td>
+                    {% if not obj.closed %}
+                    <a href="{% url 'invoice_app:position-delete' obj.pk item.pk %}" class="btn btn-danger">x</a>
+                    {% else %}
+                    closed
+                    {% endif %}
+                </td>
+                  <td>
+                    {% if not obj.payed %}
+                     not payed
+                    {% else %}
+                    payed
+                    {% endif %}
+                 </td>
+
+             </tr>
+            {% endfor %}
+            
+           </tbody>
+        </table> 
+        <div class="mt-2 text-end">
+            <h2>Total amount: R {{ obj.total_amount}}</h2>
+        </div>
+        {% else %}
+
+        <h5>No positions yet.</h>
+        {% endif %}
+
+
+   </div>
+{% endblock content %}

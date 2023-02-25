@@ -1,0 +1,18 @@
+{% extends 'partials/base.html' %}
+
+{% block title %}
+<div class="col-md-6 text-centered">
+  <h3>create a new Quotation</h3>
+</div>
+{% endblock title %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+    <a href="{% url 'clients:client_create' %}" class ="btn btn-warning"> +add client</a>
+    <a href=" {% url 'estimates:main' %}" class ="btn btn-success">list of Quotations</a>
+   <form action="" method="POST">
+        {% csrf_token %}
+        {{ form| crispy }}
+       <button type="submit" class="btn btn-primary ">save</button>
+  </form>
+{% endblock content %}

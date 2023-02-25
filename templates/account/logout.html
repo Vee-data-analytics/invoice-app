@@ -1,0 +1,31 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+     <!-- style CSS -->
+     <link rel="stylesheet" href="{% static 'style.css' %}">
+
+       <div class="card-header"><h3 class="text-center font-weight-light my-4">Logout</h3></div>
+       <div class="card-body">                                                                          
+        {% load i18n %}
+        {% block head_title %}{% trans "Sign Out" %}{% endblock %}
+        {% block content %}
+        <h1>{% trans "Sign Out" %}</h1>
+        <p>{% trans 'Are you sure you want to sign out?' %}</p>
+        <form method="post" action="{% url 'account_logout' %}">
+         {% csrf_token %}
+         {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+         {% endif %}
+         <button class="btn btn-primary" type='submit'>{% trans 'Sign Out' %}</button>
+         </form>
+          {% endblock %}
+        </div>
+    </head>

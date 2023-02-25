@@ -1,0 +1,16 @@
+{% extends 'partials/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}
+  <h3>create a new Invoice </h3> 
+{% endblock title %}
+
+{% block content %}
+   <a href="{% url 'clients:client_create' %}" class ="btn btn-warning"> +add client</a>
+   <form action="" method="POST">
+        {% csrf_token %}
+        {{ form | crispy }}
+       <button type="submit" class="btn btn-primary ">save</button>
+  </form>
+{% endblock content %}

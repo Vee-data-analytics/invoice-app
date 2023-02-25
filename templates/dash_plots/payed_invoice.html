@@ -1,0 +1,22 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Veedata Invoice Analytics</title>
+{% endblock title %}
+<script src="{% static 'https://cdn.plot.ly/plotly-latest.min.js' %}"></script>
+{% block content %}
+    {% load plotly_dash %}
+     <div class="row">
+         <div class="col-xl-11">
+             <div class="card mb-10">
+                  <div class="card-header">
+                      <i class="fas fa-chart-area mr-1"><h4>Invoices</h4></i>
+                           <div class="{% plotly_class name='payed_bar' %} card" style="height: 100%; width: 100% ">
+                        {% plotly_app name='payed_bar' ratio=0.75  %}
+              </div>
+          </div>
+       </div>
+
+
+ {% endblock content %}
